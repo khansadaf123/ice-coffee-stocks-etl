@@ -1,0 +1,20 @@
+# Coffee certified-stock pipeline - Python dependencies
+#
+# Requires Python 3.11 or newer (config.toml is read with the built-in tomllib).
+# Tested with Python 3.13 and the exact versions below.
+#
+# Install:  pip install -r requirements.txt
+
+# Data processing - all layers
+pandas==3.0.6
+
+# Extraction Layer - drives Google Chrome to scrape and download the ICE reports.
+# Selenium Manager (built in) downloads the matching ChromeDriver automatically.
+selenium==4.50.0
+
+# Bronze Layer - reads the raw Arabica .xls reports (legacy Excel format)
+xlrd==2.0.2
+
+# All layers - reads and writes the .xlsx link inventories and layer outputs
+openpyxl==3.1.5
+
