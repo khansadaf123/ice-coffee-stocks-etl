@@ -1,0 +1,28 @@
+# Coffee certified-stock pipeline - configuration
+
+[pipeline]
+
+extraction = true 
+bronze     = true
+silver     = true
+final      = true
+
+
+[extraction]
+
+# true  -> re-scrape the full date range even if the data is present
+force_extraction = false
+
+# Pause after opening each ICE report page so a CAPTCHA can be
+# completed in the Chrome window.
+prompt_for_captcha = true
+
+# Report dates to extract (inclusive, YYYY-MM-DD)
+
+[extraction.arabica]          # ICE Report 42 - Coffee "C" certified stock
+start_date = 2025-10-01
+end_date   = 2026-10-02
+
+[extraction.robusta]          # ICE Report 173 - Robusta stock figures
+start_date = 2025-10-02
+end_date   = 2026-10-02
