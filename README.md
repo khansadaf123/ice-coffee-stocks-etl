@@ -1,6 +1,11 @@
 # ICE Certified Coffee Stocks ETL
 
-End-to-end ETL pipeline for extracting, transforming, validating, and consolidating ICE Certified Coffee Stocks data for **Arabica and Robusta**.
+End-to-end ETL pipeline for extracting, transforming, validating, and
+consolidating ICE Certified Coffee Stocks data for **Arabica and Robusta**.
+
+**Main Entry Point:** `run_pipeline.py` is the main executable entry point
+for the complete ETL workflow. It orchestrates the Extraction → Bronze →
+Silver → Final stages.
 
 ## 1. Clone and Run
 
@@ -79,9 +84,30 @@ requirements.txt
 ```
 
 ---
+## 5. Technical Documentation
 
-## 5. Configuration
+Detailed implementation and processing logic are documented separately in:
 
+```text
+ICE_Coffee_Stocks_Technical_Documentation.docx
+```
+
+The technical documentation covers the processing and validation logic across the Extraction, Bronze, Silver, and Final layers.
+
+A separate document has also been created containing the **Source-to-Target Mapping (STTM)** and **unified Silver-layer Data Dictionary**:
+
+```text
+ICE_Coffee_Stocks_STTM_and_Data_Dictionary.docx
+```
+
+This document defines the source-to-target transformations and the standardized fields used in the Silver layer.
+
+
+## 6. Configuration
+
+Pipeline stages and extraction behavior can be controlled through `config.toml`.
+
+```toml
 [pipeline]
 
 extraction = true
@@ -92,16 +118,24 @@ final      = true
 
 [extraction]
 
-# true  -> re-scrape the full date range even if the data is present
+# true -> re-scrape the full date range even if the data is present
 force_extraction = false
 
 # Pause after opening each ICE report page so a CAPTCHA can be
 # completed in the Chrome window.
 prompt_for_captcha = true
+```
+
+### Configuration Options
+
+- `extraction`, `bronze`, `silver`, and `final` control which pipeline stages are executed.
+- `force_extraction = false` uses existing extraction coverage and inventory where available.
+- `force_extraction = true` re-scrapes the full date range.
+- `prompt_for_captcha = true` pauses after opening the ICE report page so a CAPTCHA can be completed manually in Chrome.
 
 ---
 
-## 6. Medallion Architecture
+## 7. Medallion Architecture
 
 The project follows a **Medallion Architecture**:
 
@@ -147,13 +181,14 @@ Selects the required certified-stock records and creates the consolidated busine
 
 ---
 
-## 7. Repository Structure
+## 8. Repository Structure
 
 ```text
 ice-coffee-stocks-etl/
 │
 ├── README.md
 ├── ICE_Coffee_Stocks_Technical_Documentation.docx
+├── ICE_Coffee_Stocks_STTM_and_Data_Dictionary.docx
 ├── requirements.txt
 ├── config.toml
 ├── run_pipeline.py
@@ -167,9 +202,11 @@ ice-coffee-stocks-etl/
 
 The extraction layer contains source reports and extraction inventories. Bronze and Silver contain intermediate datasets generated during processing.
 
+A separate **STTM and Data Dictionary** document provides the detailed source-to-target mappings and standardized Silver-layer field definitions.
+
 ---
 
-## 8. Final Output
+## 9. Final Output
 
 The final consolidated dataset is:
 
@@ -177,25 +214,23 @@ The final consolidated dataset is:
 Main_Final_data.csv
 ```
 
-It contains certified stock records for both Arabica and Robusta.
+It contains certified stock records for both Arabica and Robusta in a common analytical structure.
 
-### Final Data Dictionary
+The final output contains:
 
-| Column | Description |
-|---|---|
-| `coffee_type` | Coffee type, Arabica or Robusta |
-| `report_date` | ICE report date |
-| `warehouse_location` | Warehouse/location associated with the stock |
-| `origin` | Origin where provided by the source |
-| `stock_category` | Certified stock category |
-| `stock_status` | Stock status |
-| `certified_stock_quantity` | Certified stock quantity |
-
-The final dataset provides a common structure for both coffee types.
+```text
+coffee_type
+report_date
+warehouse_location
+origin
+stock_category
+stock_status
+certified_stock_quantity
+```
 
 ---
 
-## 9. Data Quality and Validation
+## 10. Data Quality and Validation
 
 The pipeline performs validation at multiple stages.
 
@@ -217,29 +252,12 @@ Reconciliation checks help ensure that quantities are not lost or duplicated dur
 
 ---
 
-## 10. Reproducibility
+## 11. Reproducibility
 
-The complete workflow can be executed from a fresh clone using:
-
-```bash
-git clone https://github.com/khansadaf123/ice-coffee-stocks-etl.git
-cd ice-coffee-stocks-etl
-pip install -r requirements.txt
-python run_pipeline.py
-```
+The complete workflow can be executed from a fresh clone using the installation and execution steps described above.
 
 `run_pipeline.py` is the main executable entry point for the complete ETL workflow.
 
 Source files and intermediate datasets are retained as processing checkpoints, while source-file lineage is carried through the transformation process.
 
 ---
-
-## 11. Technical Documentation
-
-The detailed implementation is documented separately in:
-
-```text
-ICE_Coffee_Stocks_Technical_Documentation.docx
-```
-
-The technical documentation covers the detailed processing and validation logic across the Extraction, Bronze, Silver, and Final layers.
